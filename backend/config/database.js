@@ -1,4 +1,12 @@
 const mongoose = require('mongoose');
+const dns = require('dns');
+
+// Configure public DNS fallback to prevent querySrv ECONNREFUSED on networks with restricted DNS
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4']);
+} catch (dnsErr) {
+  // ignore if in restricted sandbox
+}
 
 /**
  * Database connection configuration
