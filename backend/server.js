@@ -14,7 +14,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: true,
   credentials: true
 }));
 
@@ -66,8 +66,13 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-  console.log(`📡 API Base URL: http://localhost:${PORT}/api`);
-});
+// Only listen directly when running standalone (not on Vercel Serverless)
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+    console.log(`📡 API Base URL: http://localhost:${PORT}/api`);
+  });
+}
+
+module.exports = app;

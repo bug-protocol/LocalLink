@@ -110,5 +110,8 @@ backend/uploads/
 # Demo / scratch directories — not part of the project
 frontend-demo/
 
+# Vercel
+.vercel/
+
 # Local env overrides
 .env.local.override

@@ -13,7 +13,10 @@ const Register = () => {
   const [searchParams] = useSearchParams();
 
   const [formData, setFormData] = useState({
-    name: '', email: '', password: '', confirmPassword: '', phone: '',
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
     role: searchParams.get('role') || 'customer',
     address: { street: '', city: '', pincode: '', state: '' },
     businessInfo: { businessName: '', businessType: 'shop', category: '', description: '' },
@@ -42,13 +45,20 @@ const Register = () => {
     if (formData.password.length < 6) { setPasswordError('Password must be at least 6 characters'); return; }
     setIsSubmitting(true);
     try {
-      const data = { name: formData.name, email: formData.email, password: formData.password, phone: formData.phone, role: formData.role, address: formData.address };
+      const data = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+        address: formData.address,
+      };
       if (formData.role === 'vendor') data.businessInfo = formData.businessInfo;
+
       const result = await register(data);
-      if (result.success && result.requiresOtp) {
-        toast.info(`Verification code sent to ${result.email}`);
-        navigate(`/verify-otp?email=${encodeURIComponent(result.email)}`);
-      } else if (!result.success) {
+      if (result.success) {
+        toast.success('Account created! Welcome to LocalLink 🎉');
+        navigate('/dashboard', { replace: true });
+      } else {
         toast.error(result.error || 'Registration failed');
       }
     } catch (err) {
@@ -116,23 +126,19 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Basic info */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <div>
-                <label style={labelStyle}>Full Name</label>
-                <input name="name" type="text" required placeholder="Your full name" className="input-field" style={inputStyle} value={formData.name} onChange={handleChange} />
-              </div>
-              <div>
-                <label style={labelStyle}>Phone</label>
-                <input name="phone" type="tel" required maxLength={10} placeholder="10-digit number" className="input-field" style={inputStyle} value={formData.phone} onChange={handleChange} />
-              </div>
+            {/* Name */}
+            <div>
+              <label style={labelStyle}>Full Name</label>
+              <input name="name" type="text" required placeholder="Your full name" className="input-field" style={inputStyle} value={formData.name} onChange={handleChange} />
             </div>
 
+            {/* Email */}
             <div>
               <label style={labelStyle}>Email Address</label>
               <input name="email" type="email" required placeholder="you@example.com" className="input-field" style={inputStyle} value={formData.email} onChange={handleChange} />
             </div>
 
+            {/* Password */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div>
                 <label style={labelStyle}>Password</label>
@@ -152,15 +158,15 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Address */}
+            {/* Address (Optional) */}
             <div>
-              <p style={sectionTitle}>📍 Address</p>
+              <p style={sectionTitle}>📍 Address (Optional)</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <input name="address.street" type="text" required placeholder="Street address" className="input-field" style={inputStyle} value={formData.address.street} onChange={handleChange} />
+                <input name="address.street" type="text" placeholder="Street address (optional)" className="input-field" style={inputStyle} value={formData.address.street} onChange={handleChange} />
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
-                  <input name="address.city" type="text" required placeholder="City" className="input-field" value={formData.address.city} onChange={handleChange} />
-                  <input name="address.pincode" type="text" required maxLength={6} placeholder="Pincode" className="input-field" value={formData.address.pincode} onChange={handleChange} />
-                  <input name="address.state" type="text" required placeholder="State" className="input-field" value={formData.address.state} onChange={handleChange} />
+                  <input name="address.city" type="text" placeholder="City" className="input-field" value={formData.address.city} onChange={handleChange} />
+                  <input name="address.pincode" type="text" maxLength={6} placeholder="Pincode" className="input-field" value={formData.address.pincode} onChange={handleChange} />
+                  <input name="address.state" type="text" placeholder="State" className="input-field" value={formData.address.state} onChange={handleChange} />
                 </div>
               </div>
             </div>

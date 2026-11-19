@@ -31,23 +31,21 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const result = await login(formData);
-    setIsSubmitting(false);
-    if (result.success) {
-      toast.success('Welcome back! 👋');
-      const role = result.user?.role;
-      const defaultPath = role === 'admin' ? '/admin' : '/dashboard';
-      const from = location.state?.from?.pathname || defaultPath;
-      navigate(from, { replace: true });
-    } else if (result.error) {
-      // If account needs OTP verification, redirect to verify page
-      const resp = result.rawResponse;
-      if (resp?.requiresOtp) {
-        toast.warning('Please verify your email first.');
-        navigate(`/verify-otp?email=${encodeURIComponent(formData.email)}`);
+    try {
+      const result = await login(formData);
+      if (result.success) {
+        toast.success('Welcome back! 👋');
+        const role = result.user?.role;
+        const defaultPath = role === 'admin' ? '/admin' : '/dashboard';
+        const from = location.state?.from?.pathname || defaultPath;
+        navigate(from, { replace: true });
       } else {
-        toast.error(result.error);
+        toast.error(result.error || 'Invalid email or password');
       }
+    } catch (err) {
+      toast.error('Login failed. Please check your credentials.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -185,6 +183,7 @@ const Login = () => {
           <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: 3 }}>
             <span><strong>Customer:</strong> john@example.com / Test123456</span>
             <span><strong>Vendor:</strong> shop@example.com / Test123456</span>
+            <span><strong>Admin:</strong> admin@locallink.com / Admin@1234</span>
           </div>
         </div>
       </div>

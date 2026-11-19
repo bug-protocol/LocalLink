@@ -16,7 +16,6 @@ import ToastContainer from './components/ToastContainer';
 
 // Pages
 import Home from './pages/Home';
-import VerifyOtp from './pages/VerifyOtp';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -66,7 +65,7 @@ function App() {
                     <Route path="/" element={<HomeOrDashboard />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/verify-otp" element={<VerifyOtp />} />
+                    <Route path="/verify-otp" element={<Navigate to="/login" replace />} />
                     <Route path="/products" element={<Products />} />
                     <Route path="/products/:id" element={<ProductDetail />} />
                     <Route path="/services" element={<Services />} />

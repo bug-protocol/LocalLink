@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 /**
  * User Schema - Handles all user types (Customer, Vendor, Admin)
- * Role-based access control implementation
+ * Simple and flexible auth pipeline
  */
 const userSchema = new mongoose.Schema({
   // Basic Information
@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Email is required'],
     unique: true,
     lowercase: true,
+    trim: true,
     match: [
       /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
       'Please enter a valid email'
@@ -31,8 +32,7 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: [true, 'Phone number is required'],
-    match: [/^[0-9]{10}$/, 'Please enter a valid 10-digit phone number']
+    default: ''
   },
   
   // Role Management
@@ -42,29 +42,22 @@ const userSchema = new mongoose.Schema({
     default: 'customer'
   },
   
-  // Location Information
+  // Location Information (optional for simple auth)
   address: {
-    street: String,
-    city: {
-      type: String,
-      required: [true, 'City is required']
-    },
-    pincode: {
-      type: String,
-      required: [true, 'Pincode is required'],
-      match: [/^[0-9]{6}$/, 'Please enter a valid 6-digit pincode']
-    },
-    state: String
+    street: { type: String, default: '' },
+    city: { type: String, default: '' },
+    pincode: { type: String, default: '' },
+    state: { type: String, default: '' }
   },
   
-  // Account Status
+  // Account Status (immediately active & verified)
   isActive: {
     type: Boolean,
     default: true
   },
   isVerified: {
     type: Boolean,
-    default: false
+    default: true
   },
   
   // Profile Image
@@ -73,23 +66,20 @@ const userSchema = new mongoose.Schema({
     default: null
   }
 }, {
-  timestamps: true // Adds createdAt and updatedAt
+  timestamps: true
 });
 
 // Index for better query performance
-userSchema.index({ email: 1 });
 userSchema.index({ role: 1 });
-userSchema.index({ 'address.city': 1, 'address.pincode': 1 });
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
-  // Only hash password if it's modified
   if (!this.isModified('password')) {
     return next();
   }
   
   try {
-    const salt = await bcrypt.genSalt(12);
+    const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (error) {

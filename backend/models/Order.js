@@ -183,7 +183,7 @@ const orderSchema = new mongoose.Schema({
 // Indexes for better performance
 orderSchema.index({ customer: 1 });
 orderSchema.index({ vendor: 1 });
-orderSchema.index({ orderNumber: 1 });
+// orderNumber already indexed via unique:true on the field
 orderSchema.index({ status: 1 });
 orderSchema.index({ orderDate: -1 });
 orderSchema.index({ paymentStatus: 1 });

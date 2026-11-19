@@ -150,7 +150,7 @@ const createService = async (req, res) => {
     const serviceData = {
       ...req.body,
       provider: vendorProfile._id,
-      status: 'pending-approval', // requires admin approval before going live
+      status: 'active', // active immediately for simple workflow
     };
     
     console.log('📝 Service data to save:', JSON.stringify(serviceData, null, 2));

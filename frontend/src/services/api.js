@@ -34,10 +34,15 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Handle 401 errors (unauthorized)
+    // Handle 401 errors (unauthorized) - only redirect for protected requests, not login attempts
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      // Do not force-redirect if we are already logging in or registering
+      const isAuthEndpoint = error.config?.url?.includes('/auth/login') || error.config?.url?.includes('/auth/register');
+      const isAuthPage = window.location.pathname === '/login' || window.location.pathname === '/register';
+      if (!isAuthEndpoint && !isAuthPage) {
+        window.location.href = '/login';
+      }
     }
     
     // Handle network errors

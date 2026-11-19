@@ -2,20 +2,40 @@ const mongoose = require('mongoose');
 
 /**
  * Database connection configuration
- * Connects to MongoDB using Mongoose ODM
+ * Supports both standalone Node server and Vercel Serverless Function caching
  */
 const connectDB = async () => {
+  // Reuse existing connection if already open
+  if (mongoose.connection.readyState >= 1) {
+    return mongoose.connection;
+  }
+
+  const mongoUri = process.env.MONGODB_URI;
+  if (!mongoUri) {
+    console.warn('⚠️  MONGODB_URI environment variable is missing.');
+    return;
+  }
+
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const conn = await mongoose.connect(mongoUri);
 
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
     console.log(`📊 Database: ${conn.connection.name}`);
+
+    // Auto-seed starter demo users if database is empty
+    try {
+      const seedDevData = require('../utils/seedDevData');
+      await seedDevData();
+    } catch (seedErr) {
+      console.warn('Seed notice:', seedErr.message);
+    }
+
+    return conn;
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
-    process.exit(1);
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    }
   }
 };
 

@@ -169,7 +169,7 @@ bookingSchema.index({ customer: 1, bookingDate: -1 });
 bookingSchema.index({ vendor: 1, scheduledDate: 1 });
 bookingSchema.index({ service: 1 });
 bookingSchema.index({ status: 1 });
-bookingSchema.index({ bookingNumber: 1 });
+// bookingNumber already indexed via unique:true on the field
 bookingSchema.index({ scheduledDate: 1, scheduledTime: 1 });
 
 // Pre-save middleware to update timestamps

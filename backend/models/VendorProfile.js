@@ -80,13 +80,13 @@ const vendorProfileSchema = new mongoose.Schema({
   // Verification Status
   isVerified: {
     type: Boolean,
-    default: false
+    default: true
   },
   // Admin approval flow: pending → verified | rejected
   verificationStatus: {
     type: String,
     enum: ['pending', 'verified', 'rejected'],
-    default: 'pending'
+    default: 'verified'
   },
   verificationNote: {
     type: String,
@@ -130,8 +130,8 @@ const vendorProfileSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Indexes for better performance
-vendorProfileSchema.index({ user: 1 });
+// Indexes for better performance (user unique index already created by schema)
+// vendorProfileSchema.index({ user: 1 }); -- redundant, field has unique:true
 vendorProfileSchema.index({ category: 1 });
 vendorProfileSchema.index({ businessType: 1 });
 vendorProfileSchema.index({ isActive: 1, isVerified: 1 });
