@@ -146,7 +146,7 @@ const Login = () => {
                 <input type="checkbox" style={{ accentColor: 'var(--accent)', width: 15, height: 15 }} />
                 Remember me
               </label>
-              <a href="#" style={{ fontSize: '0.86rem', fontWeight: 600, color: 'var(--accent)', textDecoration: 'none' }}
+              <a href="#forgot" style={{ fontSize: '0.86rem', fontWeight: 600, color: 'var(--accent)', textDecoration: 'none' }}
                 onMouseEnter={e => e.currentTarget.style.color = 'var(--accent-600)'}
                 onMouseLeave={e => e.currentTarget.style.color = 'var(--accent)'}
               >Forgot password?</a>

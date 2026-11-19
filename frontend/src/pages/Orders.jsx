@@ -22,7 +22,6 @@ const Orders = () => {
  * Display customer order history and status
  */
 const CustomerOrders = () => {
-  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -34,6 +33,7 @@ const CustomerOrders = () => {
 
   useEffect(() => {
     fetchOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const fetchOrders = async () => {
@@ -284,7 +284,6 @@ const CustomerOrders = () => {
  * Manage incoming orders for vendors
  */
 const VendorOrders = () => {
-  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -304,6 +303,7 @@ const VendorOrders = () => {
 
   useEffect(() => {
     fetchOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const fetchOrders = async () => {

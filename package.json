@@ -4,6 +4,7 @@
   "description": "LocalLink Community Service Exchange Platform",
   "private": true,
   "scripts": {
+    "postinstall": "npm install --prefix frontend",
     "build": "npm run build --prefix frontend",
     "start": "node backend/server.js",
     "dev:backend": "node backend/dev-start.js",

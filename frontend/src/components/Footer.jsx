@@ -36,7 +36,7 @@ const Footer = () => {
               ].map((icon, i) => (
                 <a
                   key={i}
-                  href="#"
+                  href="#social"
                   style={{ color: 'rgba(255,255,255,0.35)', transition: 'color 0.15s' }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#c4b5fd')}
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
@@ -102,7 +102,7 @@ const Footer = () => {
               {['Help Center', 'Contact Us', 'Privacy Policy', 'Terms of Service'].map(label => (
                 <li key={label}>
                   <a
-                    href="#"
+                    href="#help"
                     style={{ color: 'rgba(255,255,255,0.58)', textDecoration: 'none', fontSize: '0.88rem', transition: 'color 0.15s' }}
                     onMouseEnter={e => (e.currentTarget.style.color = '#c4b5fd')}
                     onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.58)')}
